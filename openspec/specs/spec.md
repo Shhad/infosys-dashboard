@@ -31,8 +31,8 @@ These are **local build iterations** of SPEC Phase 1 (AC-1…AC-15). SPEC §12
 |-------|-----------------|--------|
 | **1 — auth-service** | `user-authentication`, `user-administration`, `auth-service-runtime` | ✅ **DONE** (archived `2026-06-16-auth-service`) |
 | **2 — task-service-cards** | `task-cards`, `task-service-runtime` | ✅ **DONE** (archived `2026-06-16-task-service-cards`) |
-| **3 — frontend-board** | `frontend-board` | ⬜ Planned |
-| **4 — stack-integration** | `stack-integration` (full one-command system, README, end-to-end AC-15) | ⬜ Planned |
+| **3 — frontend-board** | `frontend-board` | ✅ **DONE** (archived `2026-06-17-frontend-board`) |
+| **4 — stack-integration** | `stack-integration` (full one-command system, README, end-to-end AC-15) | ✅ **DONE** (archived `2026-06-17-stack-integration`) |
 | (later) AWS deploy | SPEC §12 | ⏸ Deferred |
 
 ## Capabilities
@@ -61,16 +61,22 @@ These are **local build iterations** of SPEC Phase 1 (AC-1…AC-15). SPEC §12
   key (no network call to auth — NFR-2), CORS, `/api/health`, same error envelope.
   Covers AC-4 (validation side), extends AC-15. → `openspec/specs/task-service-runtime/spec.md`
 
-### Planned (Phases 3–4) — specs authored just-in-time per change
+### Implemented (Phase 3) — specs synced under `openspec/specs/`
 
-- **`frontend-board`** (Phase 3) — React/TS/Vite + TailwindCSS. Register/login/logout,
-  5-status kanban board, create/move/delete cards, role-aware UI hiding disallowed
-  actions, admin assignee picker (`GET /admin/users`), `VITE_*` build-time API URLs.
-  Covers SPEC §6.
-- **`stack-integration`** (Phase 4) — full `docker compose up --build` brings up all
-  five services healthy (frontend, task-service, auth-service, task-db, auth-db);
-  root `README.md` (run steps, admin creds, architecture decisions per NFR-6).
-  Closes AC-15 end-to-end.
+- **`frontend-board`** — React/TS/Vite + TailwindCSS SPA (port 3000). Register/login/
+  logout, 5-status kanban board, create/move/delete cards, role/ownership-aware UI
+  hiding disallowed actions, admin assignee picker (`GET /admin/users`), `VITE_*`
+  build-time API URLs, and `401`→login session handling. Covers SPEC §6. →
+  `openspec/specs/frontend-board/spec.md`
+
+### Implemented (Phase 4) — specs synced under `openspec/specs/`
+
+- **`stack-integration`** — full `docker compose up --build` brings up all five services
+  healthy (frontend, task-service, auth-service, task-db, auth-db); the containerized
+  frontend (nginx :3000) serves the SPA with build-time `VITE_*` and works end-to-end
+  against the containerized backends; root `README.md` (run steps, admin creds,
+  architecture decisions per NFR-6). Closes AC-15 end-to-end. →
+  `openspec/specs/stack-integration/spec.md`
 
 ## Cross-cutting rules (apply to all capabilities)
 
