@@ -230,6 +230,7 @@ When the logged-in user is an ADMIN, the frontend SHALL load the user list from
 auth-service `GET /admin/users` and present it as an assignee picker, letting the
 ADMIN set a card's assignee on creation and/or via
 `PATCH /api/cards/{id}/assignee`. The picker SHALL NOT be shown to USER-role callers.
+
 The currently assigned user SHALL be excluded from the picker's select list. The
 assignee display SHALL show a person icon to the left of the assignee email, and the
 picker's dropdown SHALL be constrained so it does not overflow outside the card bounds.
