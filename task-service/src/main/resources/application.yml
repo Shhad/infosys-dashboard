@@ -1,0 +1,37 @@
+# task-service configuration. Every value comes from the environment (NFR-5);
+# the defaults below match the local docker-compose service names.
+server:
+  port: 8080
+
+spring:
+  application:
+    name: task-service
+  datasource:
+    url: ${TASK_DB_URL:jdbc:postgresql://task-db:5432/taskdb}
+    username: ${TASK_DB_USER:task}
+    password: ${TASK_DB_PASSWORD:task}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+
+# RS256 public key for local JWT validation. Primary source is the PEM shared
+# via the read-only `keys` volume; AUTH_JWKS_URL is the documented alternative.
+jwt:
+  public-key-path: ${JWT_PUBLIC_KEY_PATH:/keys/public.pem}
+  jwks-url: ${AUTH_JWKS_URL:}
+  clock-skew-seconds: 60
+
+# CORS allowed origin (frontend). NFR-4.
+cors:
+  allowed-origin: ${CORS_ORIGINS:http://localhost:3000}
+
+# Quiet the default Spring Boot health autoconfig noise; we expose our own /api/health.
+management:
+  endpoints:
+    enabled-by-default: false

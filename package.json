@@ -1,0 +1,20 @@
+{
+  "name": "magical-tasks",
+  "version": "0.0.1",
+  "description": "Simple dashboard for fullstack interview",
+  "homepage": "https://github.com/Shhad/infosys-dashboard#readme",
+  "bugs": {
+    "url": "https://github.com/Shhad/infosys-dashboard/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shhad/infosys-dashboard.git"
+  },
+  "license": "ISC",
+  "author": "Filip Baszak",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  }
+}

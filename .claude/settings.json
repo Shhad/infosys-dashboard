@@ -1,0 +1,10 @@
+{
+    "permissions": {
+      "allow": [
+        "PowerShell(npm *)",
+        "Bash(openspec *)",
+        "PowerShell(wsl -e bash -lc \"docker *\")"
+      ]
+    }
+  }
+  

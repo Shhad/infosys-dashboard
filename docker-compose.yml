@@ -1,0 +1,88 @@
+# Task Dashboard — local stack (Docker Compose).
+# Iteration 1: auth-service + auth-db. Iteration 2: task-service + task-db.
+# Later iterations add the frontend to this same file.
+#   docker compose up --build
+services:
+  auth-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${AUTH_DB_USER:-auth}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:-auth}
+      POSTGRES_DB: ${AUTH_DB_NAME:-authdb}
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${AUTH_DB_USER:-auth} -d ${AUTH_DB_NAME:-authdb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-net
+
+  auth-service:
+    build: ./auth-service
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    environment:
+      AUTH_DB_URL: ${AUTH_DB_URL:-postgresql://auth:auth@auth-db:5432/authdb}
+      JWT_PRIVATE_KEY_PATH: ${JWT_PRIVATE_KEY_PATH:-/keys/private.pem}
+      JWT_PUBLIC_KEY_PATH: ${JWT_PUBLIC_KEY_PATH:-/keys/public.pem}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-3600}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-admin@example.com}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-change-me}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8000:8000"
+    volumes:
+      # RS256 keypair lives here; task-service mounts it read-only.
+      - keys:/keys
+    networks:
+      - app-net
+
+  task-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${TASK_DB_USER:-task}
+      POSTGRES_PASSWORD: ${TASK_DB_PASSWORD:-task}
+      POSTGRES_DB: ${TASK_DB_NAME:-taskdb}
+    volumes:
+      - task-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TASK_DB_USER:-task} -d ${TASK_DB_NAME:-taskdb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-net
+
+  task-service:
+    build: ./task-service
+    depends_on:
+      task-db:
+        condition: service_healthy
+      auth-service:
+        # ensures the keys volume is populated with public.pem before we start
+        condition: service_started
+    environment:
+      TASK_DB_URL: ${TASK_DB_URL:-jdbc:postgresql://task-db:5432/taskdb}
+      TASK_DB_USER: ${TASK_DB_USER:-task}
+      TASK_DB_PASSWORD: ${TASK_DB_PASSWORD:-task}
+      JWT_PUBLIC_KEY_PATH: ${JWT_PUBLIC_KEY_PATH:-/keys/public.pem}
+      AUTH_JWKS_URL: ${AUTH_JWKS_URL:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8080:8080"
+    volumes:
+      # public key only — task-service never needs the private key (NFR-2).
+      - keys:/keys:ro
+    networks:
+      - app-net
+
+volumes:
+  auth-db-data:
+  task-db-data:
+  keys:
+
+networks:
+  app-net:

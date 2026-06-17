@@ -1,0 +1,9 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy>=2.0,<2.1
+psycopg[binary]>=3.2,<3.3
+passlib[argon2]==1.7.4
+pyjwt>=2.10,<3.0
+cryptography>=44.0.0
+pydantic-settings>=2.7.0
+email-validator>=2.2.0
