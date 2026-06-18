@@ -9,6 +9,16 @@ export const STATUSES = [
 
 export type Status = (typeof STATUSES)[number];
 
+// Per-status badge frame colors. Full literal class strings so Tailwind's
+// purge keeps them — never build these by concatenation.
+export const STATUS_BADGE: Record<Status, string> = {
+  OPEN: "border-slate-300 text-slate-600",
+  TODO: "border-yellow-400 text-yellow-700",
+  IN_PROGRESS: "border-blue-400 text-blue-700",
+  REVIEW: "border-purple-400 text-purple-700",
+  DONE: "border-green-500 text-green-700",
+};
+
 export type Role = "ADMIN" | "USER";
 
 // Identity from auth-service GET /users/me.
