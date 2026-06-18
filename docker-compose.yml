@@ -79,6 +79,32 @@ services:
     networks:
       - app-net
 
+  frontend:
+    build:
+      context: ./frontend
+      # VITE_* are BUILD args — Vite inlines them into the bundle at `vite build`.
+      # The browser (not the compose network) calls the backends, so these are the
+      # host-published localhost ports, not the in-network service names. Changing
+      # them requires `docker compose up --build` (a plain `up` reuses the old image).
+      args:
+        VITE_AUTH_BASE_URL: ${VITE_AUTH_BASE_URL:-http://localhost:8000}
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
+    depends_on:
+      # start ordering only — the SPA serves static files regardless of backend health.
+      - auth-service
+      - task-service
+    ports:
+      - "3000:3000"
+    healthcheck:
+      # 127.0.0.1 (not localhost): inside the container localhost resolves to IPv6 [::1],
+      # but nginx `listen 3000;` is IPv4-only, so localhost would be refused.
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-net
+
 volumes:
   auth-db-data:
   task-db-data:

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.taskdashboard.taskservice.card.CardServiceTest$ChangeStatusTests
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.034 s -- in com.taskdashboard.taskservice.card.CardServiceTest$ChangeStatusTests

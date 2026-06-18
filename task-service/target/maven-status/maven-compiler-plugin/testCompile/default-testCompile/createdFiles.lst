@@ -1,0 +1,6 @@
+com\taskdashboard\taskservice\card\CardServiceTest.class
+com\taskdashboard\taskservice\card\CardServiceTest$ChangeStatusTests.class
+com\taskdashboard\taskservice\card\CardServiceTest$DeleteTests.class
+com\taskdashboard\taskservice\card\CardServiceTest$ChangeAssigneeTests.class
+com\taskdashboard\taskservice\card\CardServiceTest$CreateTests.class
+com\taskdashboard\taskservice\card\CardServiceTest$ListTests.class
