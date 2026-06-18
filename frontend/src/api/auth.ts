@@ -29,3 +29,9 @@ export function getMe(): Promise<User> {
 export function listUsers(): Promise<User[]> {
   return request<User[]>({ service: "auth", path: "/admin/users" });
 }
+
+// Any authenticated caller: slim {id, email} directory used to resolve a card's
+// assignee_id to a display email (e.g. for the USER read-only assignee label).
+export function listDirectory(): Promise<Pick<User, "id" | "email">[]> {
+  return request<Pick<User, "id" | "email">[]>({ service: "auth", path: "/users" });
+}

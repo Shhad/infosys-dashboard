@@ -28,7 +28,7 @@ services:
       AUTH_DB_URL: ${AUTH_DB_URL:-postgresql://auth:auth@auth-db:5432/authdb}
       JWT_PRIVATE_KEY_PATH: ${JWT_PRIVATE_KEY_PATH:-/keys/private.pem}
       JWT_PUBLIC_KEY_PATH: ${JWT_PUBLIC_KEY_PATH:-/keys/public.pem}
-      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-3600}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-900}
       BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-admin@example.com}
       BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-change-me}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}

@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import {
   STATUSES,
-  STATUS_BADGE,
+  STATUS_LABEL,
+  STATUS_STYLE,
   type Card,
   type Status,
   type User,
+  type UserRef,
 } from "../types";
 import { canModifyCard, isAdmin } from "../permissions";
 import { AssigneePicker } from "./AssigneePicker";
+import { AssigneeLabel } from "./AssigneeLabel";
 
 // A single card with role/ownership-gated move, delete, and assignee controls.
 export function CardItem({
@@ -20,7 +23,7 @@ export function CardItem({
 }: {
   card: Card;
   me: User;
-  users: User[];
+  users: UserRef[];
   onMove: (card: Card, status: Status) => void;
   onDelete: (card: Card) => void;
   onAssign: (card: Card, assigneeId: string | null) => void;
@@ -52,10 +55,12 @@ export function CardItem({
   }, [menuOpen]);
 
   return (
-    <div className="rounded border border-slate-200 bg-white p-3 shadow-sm">
+    <div className="rounded-card border border-line bg-surface p-[13px] pb-3 shadow-card transition hover:-translate-y-px hover:border-[#dcdee8] hover:shadow-card-hover">
       {/* Title row — title on the left, "…" overflow menu on the right. */}
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-medium text-slate-800 mt-[2px]">{card.title}</h3>
+      <div className="flex items-start gap-2">
+        <h3 className="mt-[1px] min-w-0 flex-1 text-sm font-bold leading-[1.3] text-ink">
+          {card.title}
+        </h3>
 
         {canModify && (
           <div className="relative shrink-0" ref={menuRef}>
@@ -65,7 +70,7 @@ export function CardItem({
               aria-expanded={menuOpen}
               aria-label="Card actions"
               onClick={() => setMenuOpen((o) => !o)}
-              className="rounded px-1 leading-none text-slate-500 hover:bg-slate-100"
+              className="rounded px-1 leading-none tracking-widest text-faint hover:bg-line-soft hover:text-ink"
             >
               …
             </button>
@@ -73,9 +78,9 @@ export function CardItem({
             {menuOpen && (
               <div
                 role="menu"
-                className="absolute right-0 z-10 mt-1 w-40 rounded border border-slate-200 bg-white p-2 shadow-lg"
+                className="absolute right-0 z-10 mt-1 w-40 rounded-lg border border-line bg-surface p-2 shadow-card-hover"
               >
-                <label className="block text-xs text-slate-500">
+                <label className="block text-xs text-muted">
                   Move to{" "}
                   <select
                     value=""
@@ -83,7 +88,7 @@ export function CardItem({
                       onMove(card, e.target.value as Status);
                       setMenuOpen(false);
                     }}
-                    className="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-1 text-xs"
+                    className="mt-1 w-full rounded border border-line bg-surface px-2 py-1 text-xs text-ink"
                   >
                     <option value="" disabled>
                       {card.status}
@@ -115,30 +120,38 @@ export function CardItem({
       </div>
 
       {card.description && (
-        <p className="mt-1 text-xs text-slate-500">{card.description}</p>
+        <p className="mt-[5px] text-[12.5px] leading-[1.45] text-muted line-clamp-2">
+          {card.description}
+        </p>
       )}
 
-      {/* Status badge — color applied to the frame only. */}
-      <div className="mt-2">
+      {/* Status badge — filled pill: stage tint background, leading dot, and
+          stage-colored uppercase label. Color is confined to the pill. */}
+      <div className="mt-2.5">
         <span
-          className={`inline-block rounded border px-2 py-0.5 text-xs ${STATUS_BADGE[card.status]}`}
+          className={`inline-flex items-center gap-1.5 rounded-md px-2 py-[3px] text-[10.5px] font-extrabold tracking-[0.05em] ${STATUS_STYLE[card.status].tint} ${STATUS_STYLE[card.status].text}`}
         >
-          {card.status}
+          <span className={`h-[5px] w-[5px] rounded-full ${STATUS_STYLE[card.status].dot}`} />
+          {STATUS_LABEL[card.status]}
         </span>
       </div>
 
-      {/* Assignee picker — ADMIN only. Person icon sits left of the printed email. */}
-      {admin && (
-        <div className="mt-2 flex items-center gap-1">
-          <PersonIcon />
+      {/* Assignee row — ADMIN gets the editable picker, USER gets a read-only
+          label. Person icon sits left of the printed email either way. Shown for
+          every card regardless of modify permission. */}
+      <div className="mt-3 flex items-center gap-[9px] border-t border-line-soft pt-[11px] text-faint">
+        <PersonIcon />
+        {admin ? (
           <AssigneePicker
             users={users}
             value={card.assignee_id}
             excludeId={card.assignee_id}
             onChange={(assigneeId) => onAssign(card, assigneeId)}
           />
-        </div>
-      )}
+        ) : (
+          <AssigneeLabel users={users} assigneeId={card.assignee_id} />
+        )}
+      </div>
     </div>
   );
 }

@@ -5,7 +5,13 @@ from .. import repository, security
 from ..deps import get_current_user, get_db
 from ..errors import AppError
 from ..models import User
-from ..schemas import LoginRequest, RegisterRequest, TokenResponse, UserResponse
+from ..schemas import (
+    LoginRequest,
+    RegisterRequest,
+    TokenResponse,
+    UserDirectoryEntry,
+    UserResponse,
+)
 
 router = APIRouter()
 
@@ -31,3 +37,13 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 @router.get("/users/me", response_model=UserResponse)
 def me(user: User = Depends(get_current_user)):
     return user
+
+
+@router.get("/users", response_model=list[UserDirectoryEntry])
+def list_directory(
+    db: Session = Depends(get_db),
+    _user: User = Depends(get_current_user),
+):
+    """User directory ({id, email}) for any authenticated caller, so non-admins can
+    resolve a card's assignee_id to an email."""
+    return repository.list_all(db)

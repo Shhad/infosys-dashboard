@@ -9,14 +9,27 @@ export const STATUSES = [
 
 export type Status = (typeof STATUSES)[number];
 
-// Per-status badge frame colors. Full literal class strings so Tailwind's
-// purge keeps them — never build these by concatenation.
-export const STATUS_BADGE: Record<Status, string> = {
-  OPEN: "border-slate-300 text-slate-600",
-  TODO: "border-yellow-400 text-yellow-700",
-  IN_PROGRESS: "border-blue-400 text-blue-700",
-  REVIEW: "border-purple-400 text-purple-700",
-  DONE: "border-green-500 text-green-700",
+// Human-readable column/badge labels per status.
+export const STATUS_LABEL: Record<Status, string> = {
+  OPEN: "Open",
+  TODO: "To Do",
+  IN_PROGRESS: "In Progress",
+  REVIEW: "Review",
+  DONE: "Done",
+};
+
+// Per-status filled-pill styling: tint background, text color, leading dot.
+// Full literal class strings so Tailwind's purge keeps them — never build
+// these by concatenation.
+export const STATUS_STYLE: Record<
+  Status,
+  { tint: string; text: string; dot: string }
+> = {
+  OPEN: { tint: "bg-slate-100", text: "text-slate-600", dot: "bg-slate-400" },
+  TODO: { tint: "bg-yellow-100", text: "text-yellow-700", dot: "bg-yellow-400" },
+  IN_PROGRESS: { tint: "bg-blue-100", text: "text-blue-700", dot: "bg-blue-500" },
+  REVIEW: { tint: "bg-purple-100", text: "text-purple-700", dot: "bg-purple-500" },
+  DONE: { tint: "bg-green-100", text: "text-green-700", dot: "bg-green-500" },
 };
 
 export type Role = "ADMIN" | "USER";
@@ -26,6 +39,14 @@ export interface User {
   id: string;
   email: string;
   role: Role;
+}
+
+// Slim user reference for the directory — enough to resolve an assignee_id to a
+// display email. A full `User` is assignable to this. (auth GET /users, and the
+// admin GET /admin/users list narrows to it.)
+export interface UserRef {
+  id: string;
+  email: string;
 }
 
 // Card shape returned by task-service.

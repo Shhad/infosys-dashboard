@@ -1,4 +1,4 @@
-import type { User } from "../types";
+import type { UserRef } from "../types";
 
 // ADMIN-only assignee selector, populated from GET /admin/users. When `excludeId`
 // is set (the card's current assignee), that user is kept selectable-disabled so it
@@ -10,7 +10,7 @@ export function AssigneePicker({
   excludeId,
   disabled,
 }: {
-  users: User[];
+  users: UserRef[];
   value: string | null;
   onChange: (assigneeId: string | null) => void;
   excludeId?: string | null;

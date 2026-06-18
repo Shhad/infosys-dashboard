@@ -27,6 +27,16 @@ class UserResponse(BaseModel):
     role: str
 
 
+class UserDirectoryEntry(BaseModel):
+    """Slim user-directory shape for any authenticated caller. Deliberately omits
+    `role` so non-admins cannot infer admin membership."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    email: EmailStr
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "Bearer"
