@@ -1,5 +1,5 @@
 {
-  "name": "magical-tasks",
+  "name": "magical-dashboard",
   "version": "0.0.1",
   "description": "Simple dashboard for fullstack interview",
   "homepage": "https://github.com/Shhad/infosys-dashboard#readme",
@@ -13,8 +13,5 @@
   "license": "ISC",
   "author": "Filip Baszak",
   "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "test"
-  }
+  "main": "index.js"
 }
