@@ -13,8 +13,7 @@ frontend (React/TS/Tailwind, nginx :3000) ──▶ task-service (Java 21 / Spri
 
 ## Run it (one command)
 
-Prerequisites: Docker (with Compose v2). On this dev machine Docker runs inside WSL2
-Ubuntu, so Compose is invoked through WSL.
+Prerequisites: Docker (with Compose v2).
 
 ```bash
 # 1. Provide configuration (copy the template, then adjust if you like)
@@ -24,10 +23,10 @@ cp .env.example .env
 docker compose up --build
 ```
 
-On Windows where Docker lives in WSL2 (not on the Windows PATH), run it via WSL:
+On Windows wher\n you use WSL, run it via WSL:
 
 ```bash
-wsl -e bash -lc "cd /mnt/d/programowanie/projects/infosys-dashboard && docker compose up --build"
+wsl -e bash -lc "cd /mnt/PATH_TO_PROJECT && docker compose up --build"
 ```
 
 Then open **http://localhost:3000**.
@@ -107,6 +106,6 @@ Keep the dev server on port 3000 for the same CORS reason as above.
 
 ## Project status
 
-Local stack (SPEC Phase 1, AC-1…AC-15) is complete: auth-service, task-service, the
+MVP is complete: auth-service, task-service, the
 React board, and the one-command Docker Compose integration. AWS deployment (SPEC §12)
 is deferred.

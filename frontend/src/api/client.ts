@@ -57,8 +57,11 @@ export async function request<T>({
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
-  // Global 401 handling: clear token and let the app redirect to login.
-  if (res.status === 401) {
+  // Global 401 handling: an expired/invalid session on an *authenticated*
+  // request clears the token and lets the app redirect to login. Unauthenticated
+  // requests (login/register) skip this so their 401 surfaces to the form instead
+  // of being mislabelled as a session expiry.
+  if (res.status === 401 && auth) {
     clearToken();
     if (unauthorizedHandler) unauthorizedHandler();
     throw new ApiError(401, "unauthorized", "Your session has expired. Please log in again.");

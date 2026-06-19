@@ -1,4 +1,4 @@
-import { STATUSES, type Card, type Status, type User } from "../types";
+import { STATUSES, type Card, type Status, type User, type UserRef } from "../types";
 import { Column } from "./Column";
 
 // The five-column board. Cards are grouped by status.
@@ -12,25 +12,29 @@ export function Board({
 }: {
   cards: Card[];
   me: User;
-  users: User[];
+  users: UserRef[];
   onMove: (card: Card, status: Status) => void;
   onDelete: (card: Card) => void;
   onAssign: (card: Card, assigneeId: string | null) => void;
 }) {
   return (
-    <div className="flex gap-4 overflow-x-auto pb-4">
-      {STATUSES.map((status) => (
-        <Column
-          key={status}
-          status={status}
-          cards={cards.filter((c) => c.status === status)}
-          me={me}
-          users={users}
-          onMove={onMove}
-          onDelete={onDelete}
-          onAssign={onAssign}
-        />
-      ))}
+    // Five-column grid at the desktop reference width; on narrow viewports the
+    // min-width forces horizontal scroll instead of crushing the columns.
+    <div className="overflow-x-auto">
+      <div className="grid min-w-[1100px] grid-cols-5 items-start gap-4 px-[26px] pb-8 pt-4">
+        {STATUSES.map((status) => (
+          <Column
+            key={status}
+            status={status}
+            cards={cards.filter((c) => c.status === status)}
+            me={me}
+            users={users}
+            onMove={onMove}
+            onDelete={onDelete}
+            onAssign={onAssign}
+          />
+        ))}
+      </div>
     </div>
   );
 }

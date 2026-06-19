@@ -21,7 +21,13 @@ export function LoginPage() {
       await login(email, password);
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Login failed.");
+      if (err instanceof ApiError) {
+        // A 401 here means the credentials were rejected (the login request is
+        // unauthenticated, so it can't be a session expiry).
+        setError(err.status === 401 ? "Wrong email or password" : err.message);
+      } else {
+        setError("Login failed.");
+      }
     } finally {
       setSubmitting(false);
     }

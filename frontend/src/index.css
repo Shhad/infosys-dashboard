@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  /* Tabular figures for column counts / issue totals so widths stay stable. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}

@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     auth_db_url: str = "postgresql://auth:auth@auth-db:5432/authdb"
     jwt_private_key_path: str = "/keys/private.pem"
     jwt_public_key_path: str = "/keys/public.pem"
-    jwt_expires_in: int = 3600
+    jwt_expires_in: int = 900
     bootstrap_admin_email: str = "admin@example.com"
     bootstrap_admin_password: str = "change-me"
     cors_origins: str = "http://localhost:3000"
