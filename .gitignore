@@ -33,6 +33,9 @@ __pycache__/
 *.pyc
 .venv/
 
+# Project context and phase organizer
+context/temp/
+
 # Node / frontend
 node_modules/
 dist/
